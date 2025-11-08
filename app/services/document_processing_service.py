@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional
 from django.core.files.uploadedfile import UploadedFile
-from app.mapper.text_extractor import TextExtractor
+from app.mapper import TextExtractor, NormalizerPresets
 from datetime import timezone
 
 class DocumentProcessingService:
@@ -14,6 +14,7 @@ class DocumentProcessingService:
     def __init__(self):
         """Initialize the service with required extractors and validators."""
         self.text_extractor = TextExtractor()
+        self.text_normalizer = NormalizerPresets.for_job_matching()
         self.supported_extensions = {
             '.pdf', '.docx', '.json', '.txt', '.text',
             '.jpg', '.jpeg', '.png'
@@ -49,12 +50,14 @@ class DocumentProcessingService:
                 - error: error message (if failed)
                 - status_code: suggested HTTP status code
         """
+        # Step 1: Validate file presence
         if not uploaded_file:
             return self._error_response(
                 "No file received",
                 status_code=400
             )
 
+        # Step 2: Read file content
         try:
             file_content = uploaded_file.read()
             file_name = uploaded_file.name
@@ -64,6 +67,7 @@ class DocumentProcessingService:
                 status_code=400
             )
 
+        # Step 3: Validate file properties
         validation_result = self._validate_file(
             file_name=file_name,
             file_content=file_content
@@ -74,8 +78,10 @@ class DocumentProcessingService:
                 status_code=400
             )
 
+        # Step 4: Extract file extension
         extension = self._get_file_extension(file_name)
 
+        # Step 5: Prepare metadata
         metadata = self._prepare_metadata(
             user_id=user_id,
             doc_id=doc_id,
@@ -83,6 +89,7 @@ class DocumentProcessingService:
             file_size=len(file_content)
         )
 
+        # Step 6: Extract text
         extraction_result = self.text_extractor.extract_text(
             file_path=file_name,
             metadata=metadata,
@@ -90,12 +97,22 @@ class DocumentProcessingService:
             extension=extension
         )
 
+        # Step 7: Format response
         if "error" in extraction_result:
             return self._error_response(
                 extraction_result["error"],
                 status_code=500,
                 details=extraction_result
             )
+
+        # Step 8: Normalize the extracted text
+        raw_text = extraction_result.get("extracted_text", "")
+        normalized_text = self.text_normalizer.normalize(raw_text)
+
+        # Update result with normalized text and metrics
+        extraction_result["extracted_text"] = normalized_text
+        extraction_result["raw_text_length"] = len(raw_text)
+        extraction_result["normalized_text_length"] = len(normalized_text)
 
         return self._success_response(extraction_result)
 
@@ -127,7 +144,6 @@ class DocumentProcessingService:
                 "error": "File is empty"
             }
 
-        # Check extension
         extension = self._get_file_extension(file_name)
         if not extension:
             return {
