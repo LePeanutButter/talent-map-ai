@@ -1,8 +1,9 @@
+phonenumberslite
 pillow
 pytesseract
 python-docx
 pypdf
-asgiref==3.10.0
-Django==5.2.8
-sqlparse==0.5.3
-tzdata==2025.2
+asgiref
+Django
+sqlparse
+tzdata

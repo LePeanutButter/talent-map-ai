@@ -1,4 +1,4 @@
-from .text_normalizer import TextNormalizer
+from app.mapper.text_normalizer import TextNormalizer
 
 class NormalizerPresets:
     """Common normalizer configurations for different use cases."""
@@ -60,17 +60,8 @@ class NormalizerPresets:
         """
         Optimal configuration for job matching with BERT.
 
-        Key decisions:
-        - Keep case: BERT models are case-sensitive and can distinguish
-          between "Java" (programming) and "java" (coffee)
-        - Remove URLs: Not relevant for job matching
-        - Keep emails: Might be part of contact info (optional)
-        - Keep special chars: Important for technical terms (C++, .NET, etc.)
-        - Clean whitespace: Helps BERT tokenization
-        - Moderate newlines: Maintains document structure
-
-        Returns:
-            Configured TextNormalizer instance
+        IMPORTANT: This does NOT include PII removal.
+        Use for_job_matching_with_privacy() for anonymization.
         """
         return TextNormalizer(
             remove_extra_whitespace=True,

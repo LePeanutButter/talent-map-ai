@@ -1,6 +1,7 @@
+import json
 from typing import Dict, Any, Optional
 from django.core.files.uploadedfile import UploadedFile
-from app.mapper import TextExtractor, NormalizerPresets
+from app.mapper import TextExtractor, PrivacyAwareNormalizer
 from datetime import timezone
 
 class DocumentProcessingService:
@@ -14,7 +15,7 @@ class DocumentProcessingService:
     def __init__(self):
         """Initialize the service with required extractors and validators."""
         self.text_extractor = TextExtractor()
-        self.text_normalizer = NormalizerPresets.for_job_matching()
+        self.text_normalizer = PrivacyAwareNormalizer()
         self.supported_extensions = {
             '.pdf', '.docx', '.json', '.txt', '.text',
             '.jpg', '.jpeg', '.png'
@@ -107,7 +108,7 @@ class DocumentProcessingService:
 
         # Step 8: Normalize the extracted text
         raw_text = extraction_result.get("extracted_text", "")
-        normalized_text = self.text_normalizer.normalize(raw_text)
+        normalized_text = self.text_normalizer.anonymize_cv_for_bert(raw_text)
 
         # Update result with normalized text and metrics
         extraction_result["extracted_text"] = normalized_text
