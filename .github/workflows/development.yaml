@@ -82,6 +82,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: python-app
+          path: build
 
        # Step 2: Login using service principal credentials
       - name: Login to Azure using service principal
@@ -96,7 +97,7 @@ jobs:
         with:
           app-name: 'talentmap-ai-development'
           slot-name: 'Production'
-          package: .
+          package: build
 
       # Step 4: Logout from Azure to clean up session
       - name: Logout from Azure
