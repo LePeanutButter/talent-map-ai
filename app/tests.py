@@ -17,12 +17,12 @@ class JobMatchingDatasetTest(TestCase):
         self.cv_samples = []
         with open(dataset_path, "r", encoding="utf-8") as f:
             for i, line in enumerate(f):
-                if i >= 50:  # cambia a más si quieres probar más CVs
+                if i >= 4817:  # cambia a más si quieres probar más CVs
                     break
                 try:
                     self.cv_samples.append(json.loads(line))
                 except json.JSONDecodeError:
-                    print(f"⚠️ Error al leer línea {i}")
+                    print(f"Error al leer línea {i}")
 
         # Oferta laboral de prueba
         self.job_offer = """
