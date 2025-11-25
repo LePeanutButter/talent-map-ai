@@ -2,7 +2,6 @@ import re
 from app.mapper.privacy_aware_anonymizer import PrivacyAwareAnonymizer
 from app.mapper.text_normalizer import TextNormalizer
 
-
 class PrivacyAwareNormalizer:
     """
     Combined normalizer + anonymizer for privacy-preserving job matching.

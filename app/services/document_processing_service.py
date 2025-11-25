@@ -1,4 +1,3 @@
-import json
 from typing import Dict, Any, Optional
 from django.core.files.uploadedfile import UploadedFile
 from app.mapper import TextExtractor, PrivacyAwareNormalizer
@@ -107,8 +106,14 @@ class DocumentProcessingService:
             )
 
         # Step 8: Normalize the extracted text
-        raw_text = extraction_result.get("extracted_text", "")
-        normalized_text = self.text_normalizer.anonymize_cv_for_bert(raw_text)
+        try:
+            raw_text = extraction_result.get("extracted_text", "")
+            normalized_text = self.text_normalizer.anonymize_cv_for_bert(raw_text)
+        except Exception as e:
+            return self._error_response(
+                f"Normalization error: {str(e)}",
+                status_code=500
+            )
 
         # Update result with normalized text and metrics
         extraction_result["extracted_text"] = normalized_text
