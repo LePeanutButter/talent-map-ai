@@ -1,7 +1,7 @@
 import json
 import unittest
 from django.test import TestCase
-from app.services.job_matching_service import JobMatchingService
+from app.services.job_matching_service_old import JobMatchingService
 from pathlib import Path
 
 class JobMatchingDatasetTest(TestCase):
