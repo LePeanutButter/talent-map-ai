@@ -128,15 +128,30 @@ class PrivacyAwareAnonymizer:
         """Load common first/last names for detection."""
         self.common_first_names = {
             'juan', 'maría', 'jose', 'carlos', 'ana', 'luis', 'pedro', 'carmen',
+            'andrés', 'camilo', 'fernando', 'laura', 'sofia', 'valentina',
+            'miguel', 'mateo', 'santiago', 'manuel', 'roberto', 'raul',
             'john', 'mary', 'michael', 'sarah', 'david', 'jennifer', 'robert',
-            'james', 'william', 'richard', 'thomas', 'daniel', 'jessica', 'emily'
+            'james', 'william', 'richard', 'thomas', 'daniel', 'jessica', 'emily',
+            'chris', 'christopher', 'amanda', 'brian', 'kevin', 'steven',
+            'joão', 'maria', 'josé', 'paulo', 'pedro', 'lucas', 'marcos', 'aline',
+            'beatriz', 'larissa', 'fernanda', 'rodrigo',
+            'jean', 'pierre', 'luc', 'marie', 'nathalie', 'antoine', 'charles',
+            'arjun', 'rahul', 'rohit', 'amit', 'anil', 'priya', 'anisha', 'deepak',
+            'vivek', 'sanjay', 'raj', 'kumar'
         }
 
     def _load_university_keywords(self):
         """Load keywords indicating educational institutions."""
         self.university_keywords = {
             'university', 'universidad', 'college', 'instituto', 'institute',
-            'school', 'escuela', 'academy', 'academia', 'polytechnic', 'politécnico'
+            'school', 'escuela', 'academy', 'academia',
+            'polytechnic', 'politécnico', 'technological', 'tecnológico',
+            'campus', 'facultad', 'faculty',
+            'uc', 'mit', 'harvard', 'stanford', 'oxford', 'cambridge',
+            'sorbonne', 'andes', 'javeriana', 'eafit', 'unal', 'uniandes',
+            'tec', 'unal', 'usp', 'eci',
+            'inacap', 'formation center', 'training center',
+            'business school', 'medical school', 'law school'
         }
 
     def _remove_emails(self, text: str) -> str:

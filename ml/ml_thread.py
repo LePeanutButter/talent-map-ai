@@ -20,6 +20,7 @@ def load_and_train():
             model_id="job_matching_v1",
             train_data=train_data,
             val_data=val_data,
+            epochs=12
         )
 
         g.job_matching_model = service

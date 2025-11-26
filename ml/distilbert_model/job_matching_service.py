@@ -31,6 +31,7 @@ class JobMatchingService:
                       model_id: str,
                       train_data: list,
                       val_data: list = None,
+                      epochs: int = 5,
                       mode: str = "cosine"):
         """
         Loads a pre-trained model if available, or trains and saves a new model with a unique name.
@@ -42,6 +43,7 @@ class JobMatchingService:
         :param model_id: Identifier for the model (e.g., name or unique ID).
         :param train_data: List of training data to train the model, typically in the form of (input_data, label) pairs.
         :param val_data: Optional validation data in the same format as `train_data`, used to evaluate model performance.
+        :param epochs: Number of epochs to train.
         :param mode: Mode for model training, typically "cosine" for cosine similarity or "clf" for classification.
                       Defaults to "cosine".
 
@@ -66,6 +68,7 @@ class JobMatchingService:
             model_id=model_id,
             train_data=train_data,
             val_data=val_data,
+            epochs=epochs,
             mode=mode
         )
 
@@ -73,10 +76,10 @@ class JobMatchingService:
                        model_id: str,
                        train_data: list,
                        val_data: list = None,
-                       epochs: int = 5,
+                       epochs: int = 12,
                        mode: str = "cosine",
                        batch_size: int = 16,
-                       lr: float = 2e-5,
+                       lr: float = 1e-5,
                        weight_decay: float = 1e-4,
                        freeze_bert: bool = True,
                        use_amp: bool = False,
