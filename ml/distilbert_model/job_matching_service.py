@@ -27,6 +27,48 @@ class JobMatchingService:
         self.tokenizer = DistilBertTokenizer.from_pretrained(model_name)
         self.model = None
 
+    def load_or_train(self,
+                      model_id: str,
+                      train_data: list,
+                      val_data: list = None,
+                      mode: str = "cosine"):
+        """
+        Loads a pre-trained model if available, or trains and saves a new model with a unique name.
+
+        If a model with the given `model_id` exists in the `save_dir`, it will be loaded. If not, a new model will
+        be trained using the provided `train_data`, saved with a unique name based on `model_id`, and the path to the
+        saved model will be returned.
+
+        :param model_id: Identifier for the model (e.g., name or unique ID).
+        :param train_data: List of training data to train the model, typically in the form of (input_data, label) pairs.
+        :param val_data: Optional validation data in the same format as `train_data`, used to evaluate model performance.
+        :param mode: Mode for model training, typically "cosine" for cosine similarity or "clf" for classification.
+                      Defaults to "cosine".
+
+        :return: Path to the saved model file (either the loaded or newly trained model).
+        """
+
+        candidates = [
+            f for f in os.listdir(self.save_dir)
+            if f.startswith(model_id) and f.endswith(".xz")
+        ]
+
+        if candidates:
+            latest = sorted(candidates)[-1]
+            model_path = os.path.join(self.save_dir, latest)
+            print(f"[LM] Existing model found: {model_path}")
+            self.model = JobMatchingModel.load(model_path, device=self.device)
+            return model_path
+
+        print("[LM] No saved model found. Training new one...")
+
+        return self.train_and_save(
+            model_id=model_id,
+            train_data=train_data,
+            val_data=val_data,
+            mode=mode
+        )
+
     def train_and_save(self,
                        model_id: str,
                        train_data: list,

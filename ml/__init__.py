@@ -1,1 +1,1 @@
-from .distilbert_model import *
+default_app_config = 'ml.apps.MLConfig'

@@ -95,7 +95,7 @@ TalentMap AI follows UNESCO’s *Recommendation on the Ethics of Artificial Inte
 
 ## Test Results
 
-These results are based on a series of **test runs** performed to demonstrate how the model works when trained with a small dataset.
+These results are based on a series of **test runs** performed to demonstrate how the model works when trained with a small dataset and tested on a larger, more representative dataset.
 
 ### Training Configuration:
 
@@ -158,6 +158,31 @@ The model training took **173.68 seconds**, and the model was successfully saved
 4. **Test Completion:**
 
    * All tests completed successfully in **190.272s**.
+
+---
+
+### Testing on HF Resumes Dataset:
+
+For a broader evaluation, the model was tested using a dataset of **4817 resumes**. Here are the **Top 10 most relevant matches** according to the model:
+
+1. **Row 2419** | Score: 0.9268 — Creative iOS Developer with a focus on building elegant and user-friendly applications for Apple devices. Proficient in Swift, Xcode, and iOS SDK.
+2. **Row 1569** | Score: 0.9234 — Creative Web Developer with a passion for building responsive and user-friendly web applications. Proficient in HTML, CSS, JavaScript, and front-end frameworks like React.
+3. **Row 1901** | Score: 0.9230 — AI Engineer with expertise in artificial intelligence, machine learning, and deep learning. Skilled in Python, TensorFlow, and developing AI-powered applications.
+4. **Row 1670** | Score: 0.9228 — Analytical Data Scientist with a passion for machine learning, statistical analysis, and data-driven decision making. Experienced with Python, R, and modern data visualization tools.
+5. **Row 5**   | Score: 0.9224 — Python Developer in the field of computer vision for a US-based client in the banking domain. Design and development of computer vision-based algorithms.
+6. **Row 108** | Score: 0.9224 — Python Developer in the field of computer vision for a US-based client in the banking domain. Design and development of computer vision-based algorithms.
+7. **Row 2614**| Score: 0.9220 — Innovative Android Developer with a passion for mobile app development and user experience design. Skilled in Java, Kotlin, and Android Studio.
+8. **Row 2480**| Score: 0.9213 — Creative iOS Developer with a focus on building elegant and user-friendly applications for Apple devices. Proficient in Swift, Xcode, and iOS SDK.
+9. **Row 71**  | Score: 0.9208 — Python Developer in the field of computer vision for a US-based client in the banking domain. Design and development of computer vision-based algorithms.
+10. **Row 175**| Score: 0.9208 — Python Developer in the field of computer vision for a US-based client in the banking domain. Design and development of computer vision-based algorithms.
+
+### Important Notes on Test Results:
+
+The test results above show strong matching scores across the top resumes, but it's important to highlight the following:
+
+1. **Dataset Size and Quality:** While testing with a larger dataset of 4817 resumes provides more context, the model was trained on a very small dataset (only 8 training samples). This can still impact the accuracy and relevance of the results, especially in larger or more complex real-world scenarios.
+
+2. **No Anonymization in Testing:** The model has not yet fully implemented anonymization, which could influence its ability to avoid potential biases in resume matching. Further improvements on anonymization and fairness are planned for future updates.
 
 ---
 
