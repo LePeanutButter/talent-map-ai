@@ -175,7 +175,7 @@ class TextExtractor:
         if paragraphs:
             all_text.append('\n'.join(paragraphs))
         if table_texts:
-            all_text.append('\n--- Tables ---\n' + '\n'.join(table_texts))
+            all_text.append('--- Tables ---\n' + '\n'.join(table_texts))
 
         if not all_text:
             return "Warning: No text could be extracted from DOCX"

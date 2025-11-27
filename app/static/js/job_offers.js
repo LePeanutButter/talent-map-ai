@@ -1,0 +1,13 @@
+const JOB_OFFERS = {
+    finance_analyst: "Bilingual Financial Analyst: Join our prestigious watch brand to manage and analyze financial data, ensuring the financial health of our high-end operations. Expertise in forecasting, budgeting, and reporting is essential.",
+    hr_specialist: "HR Generalist: As part of our elite team, you will manage recruitment, talent development, employee relations, and benefits, all while fostering a culture of excellence and precision.",
+    operations_tech: "Watchmaking Technician: Bring your expertise in haute horlogerie to repair, assemble, and maintain our luxury timepieces. Precision and attention to detail are paramount as you work with the finest materials.",
+    marketing_manager: "Marketing Manager: Lead the development and execution of high-touch marketing strategies that elevate our luxury brand, ensuring campaigns resonate with our discerning clientele across multiple platforms.",
+    it_support: "IT Support Specialist: Provide critical technical support for our boutique and global operations, ensuring the seamless functioning of our systems that support our luxury watchmaking and customer experiences.",
+    accountant: "Accountant: Oversee the financial records and reporting for our luxury watch brand. You will ensure our accounting practices meet the highest standards, from balance sheets to tax compliance.",
+    sales_exec: "Key Account Executive: Cultivate and maintain relationships with our elite clients, offering tailored services and personalized experiences to further our brand's reputation for excellence and exclusivity.",
+    rnd_engineer: "Materials Engineer: As part of our R&D team, you will develop and test innovative materials that push the boundaries of luxury watchmaking, enhancing both aesthetic and functional qualities of our timepieces.",
+    customer_service: "Customer Service Representative: Provide exceptional, personalized service to our clients, addressing inquiries, handling repairs, and ensuring every customer interaction reflects the sophistication of our brand.",
+    legal_counsel: "Legal Counsel: Advise on legal matters related to intellectual property, brand protection, and corporate governance, ensuring that all our luxury watch collections and business practices remain legally sound.",
+    python_engineer_ml: "Python Engineer (Machine Learning): Develop and implement AI-driven solutions that enhance the precision and innovation of our luxury timepieces, leveraging machine learning to improve everything from production processes to customer experience."
+};

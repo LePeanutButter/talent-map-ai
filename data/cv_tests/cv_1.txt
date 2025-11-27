@@ -1,0 +1,25 @@
+**Sophia Martinez**
+Email: [sophia.martinez@example.com](mailto:sophia.martinez@example.com)
+Phone: +1-212-555-9876
+Location: New York, USA
+
+**Summary:**
+Experienced IT professional specializing in infrastructure stability within luxury manufacturing environments. Skilled in network management, Linux administration, and VMware, ensuring reliable system performance and supporting digital transformation initiatives.
+
+**Experience:**
+**IT Infrastructure Engineer – Luxe Manufacturing Inc (2016-2025)**
+
+* Managed server environments and monitored network performance.
+* Collaborated with IT security teams to ensure system resilience.
+* Supported digital transformation initiatives for production and retail teams.
+
+**Network Administrator – Global Tech Solutions (2012-2016)**
+
+* Maintained internal network systems and provided support for team operations.
+* Assisted with troubleshooting and security compliance tasks.
+
+**Skills:**
+Network Management, Linux Administration, VMware, Troubleshooting, Security Compliance
+
+**Education:**
+B.Sc. in Information Technology – New York University, USA

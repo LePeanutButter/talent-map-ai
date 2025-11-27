@@ -72,20 +72,15 @@ class TextNormalizer:
             normalized = normalized.lower()
 
         normalized = self._limit_consecutive_newlines(
-            normalized,
-            max_count=self.max_consecutive_newlines
+            normalized, max_count=self.max_consecutive_newlines
         )
 
-        normalized = normalized.strip()
-
-        return normalized
+        return normalized.strip()
 
     @staticmethod
     def _normalize_line_breaks(text: str) -> str:
         """Convert all line break variants to standard \n."""
-        text = text.replace('\r\n', '\n')
-        text = text.replace('\r', '\n')
-        return text
+        return text.replace("\r\n", "\n").replace("\r", "\n")
 
     @staticmethod
     def _remove_extra_whitespace(text: str) -> str:
@@ -97,14 +92,14 @@ class TextNormalizer:
     @staticmethod
     def _remove_urls(text: str) -> str:
         """Remove HTTP/HTTPS URLs from text."""
-        url_pattern = r'https?://[^\s]+'
-        return re.sub(url_pattern, '', text)
+        pattern = r"\s*https?://[^\s]+\s*"
+        return re.sub(pattern, " ", text).strip()
 
     @staticmethod
     def _remove_emails(text: str) -> str:
         """Remove email addresses from text."""
-        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-        return re.sub(email_pattern, '', text)
+        pattern = r"\s*\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b\s*"
+        return re.sub(pattern, " ", text).strip()
 
     @staticmethod
     def _remove_special_characters(text: str) -> str:
@@ -113,18 +108,16 @@ class TextNormalizer:
 
         Preserves: letters, numbers, spaces, periods, commas, newlines, hyphens, apostrophes
         """
-        pattern = r"[^a-zA-Z0-9\s.,'-]"
-        return re.sub(pattern, '', text)
+        pattern = r"[^a-zA-Z0-9 .,'\-\n]"
+        return re.sub(pattern, "", text)
 
     @staticmethod
     def _limit_consecutive_newlines(text: str, max_count: int = 2) -> str:
         """Limit consecutive newlines to a maximum count."""
         if max_count < 1:
             max_count = 1
-
-        pattern = r'\n{' + str(max_count + 1) + r',}'
-        replacement = '\n' * max_count
-        return re.sub(pattern, replacement, text)
+        pattern = r"\n{" + str(max_count + 1) + r",}"
+        return re.sub(pattern, "\n" * max_count, text)
 
     @staticmethod
     def remove_extraction_errors(text: str) -> str:
@@ -135,14 +128,18 @@ class TextNormalizer:
         included in the extracted text by the extraction methods.
         """
         error_patterns = [
-            r'Error:.*?(?=\n|$)',
-            r'Warning:.*?(?=\n|$)',
-            r'\[Error.*?\]',
-            r'\[Warning.*?\]',
+            r"^Error:.*?$",
+            r"^Warning:.*?$",
+            r"^\[Error.*?\]$",
+            r"^\[Warning.*?\]$"
         ]
 
-        cleaned = text
-        for pattern in error_patterns:
-            cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
+        cleaned_lines = []
+        for line in text.split("\n"):
+            if any(re.search(pat, line.strip(), flags=re.IGNORECASE) for pat in error_patterns):
+                continue
+            cleaned_lines.append(line.strip())
 
+        cleaned = "\n".join(cleaned_lines)
+        cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
         return cleaned.strip()

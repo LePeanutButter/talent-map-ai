@@ -1,0 +1,27 @@
+
+**Dimitri Sokolov**
+
+Email: [dimitri.sokolov@example.com](mailto:dimitri.sokolov@example.com)
+Phone: +7-495-555-3435
+Location: Moscow, Russia
+
+**Summary:**
+Experienced Python Engineer with expertise in machine learning and artificial intelligence. Passionate about incorporating AI and data-driven solutions into the luxury watchmaking process to enhance both production efficiency and customer experience.
+
+**Experience:**
+**Python Engineer (Machine Learning) – Timeless Innovations (2018-2025)**
+
+* Developed machine learning algorithms to optimize production lines and enhance watch precision.
+* Collaborated with R&D teams to create AI-powered systems for predictive maintenance and quality control.
+* Implemented data analytics solutions to personalize customer interactions and improve service.
+
+**Software Engineer – Quantum Tech Solutions (2015-2018)**
+
+* Worked on data-driven projects for clients in various industries, focusing on AI and machine learning applications.
+* Assisted in developing software solutions to analyze large datasets and optimize business operations.
+
+**Skills:**
+Python, Machine Learning, AI, Data Analytics, Predictive Modeling, Software Development
+
+**Education:**
+M.Sc. in Computer Science – Moscow Institute of Technology, Russia

@@ -31,6 +31,10 @@ class PrivacyAwareAnonymizer:
     PLACEHOLDER_ID = '[ID]'
     PLACEHOLDER_NAME = '[NAME]'
     PLACEHOLDER_EDUCATION = '[EDUCATION]'
+    DEGREE_KEYWORDS = [
+        'bachelor', 'master', 'phd', 'doctorate', 'licenciatura',
+        'maestría', 'doctorado', 'ingeniería', 'engineering'
+    ]
 
     def __init__(self):
         """Initialize with patterns for PII detection."""
@@ -124,15 +128,30 @@ class PrivacyAwareAnonymizer:
         """Load common first/last names for detection."""
         self.common_first_names = {
             'juan', 'maría', 'jose', 'carlos', 'ana', 'luis', 'pedro', 'carmen',
+            'andrés', 'camilo', 'fernando', 'laura', 'sofia', 'valentina',
+            'miguel', 'mateo', 'santiago', 'manuel', 'roberto', 'raul',
             'john', 'mary', 'michael', 'sarah', 'david', 'jennifer', 'robert',
-            'james', 'william', 'richard', 'thomas', 'daniel', 'jessica', 'emily'
+            'james', 'william', 'richard', 'thomas', 'daniel', 'jessica', 'emily',
+            'chris', 'christopher', 'amanda', 'brian', 'kevin', 'steven',
+            'joão', 'maria', 'josé', 'paulo', 'pedro', 'lucas', 'marcos', 'aline',
+            'beatriz', 'larissa', 'fernanda', 'rodrigo',
+            'jean', 'pierre', 'luc', 'marie', 'nathalie', 'antoine', 'charles',
+            'arjun', 'rahul', 'rohit', 'amit', 'anil', 'priya', 'anisha', 'deepak',
+            'vivek', 'sanjay', 'raj', 'kumar'
         }
 
     def _load_university_keywords(self):
         """Load keywords indicating educational institutions."""
         self.university_keywords = {
             'university', 'universidad', 'college', 'instituto', 'institute',
-            'school', 'escuela', 'academy', 'academia', 'polytechnic', 'politécnico'
+            'school', 'escuela', 'academy', 'academia',
+            'polytechnic', 'politécnico', 'technological', 'tecnológico',
+            'campus', 'facultad', 'faculty',
+            'uc', 'mit', 'harvard', 'stanford', 'oxford', 'cambridge',
+            'sorbonne', 'andes', 'javeriana', 'eafit', 'unal', 'uniandes',
+            'tec', 'unal', 'usp', 'eci',
+            'inacap', 'formation center', 'training center',
+            'business school', 'medical school', 'law school'
         }
 
     def _remove_emails(self, text: str) -> str:
@@ -240,13 +259,9 @@ class PrivacyAwareAnonymizer:
             contains_university = any(keyword in line_lower for keyword in self.university_keywords)
 
             if contains_university:
-                degree_keywords = [
-                    'bachelor', 'master', 'phd', 'doctorate', 'licenciatura',
-                    'maestría', 'doctorado', 'ingeniería', 'engineering'
-                ]
 
                 preserved_parts = []
-                for keyword in degree_keywords:
+                for keyword in PrivacyAwareAnonymizer.DEGREE_KEYWORDS:
                     if keyword in line_lower:
                         preserved_parts.append(keyword.title())
 
@@ -269,19 +284,33 @@ class PrivacyAwareAnonymizer:
         anonymized_lines = []
 
         for i, line in enumerate(lines):
-            if PrivacyAwareAnonymizer.PLACEHOLDER_EMAIL in line or PrivacyAwareAnonymizer.PLACEHOLDER_PHONE in line or PrivacyAwareAnonymizer.PLACEHOLDER_SOCIAL in line or PrivacyAwareAnonymizer.PLACEHOLDER_URL in line:
+            line_lower = line.lower()
+
+            if any(placeholder in line for placeholder in [
+                PrivacyAwareAnonymizer.PLACEHOLDER_EMAIL,
+                PrivacyAwareAnonymizer.PLACEHOLDER_PHONE,
+                PrivacyAwareAnonymizer.PLACEHOLDER_SOCIAL,
+                PrivacyAwareAnonymizer.PLACEHOLDER_URL
+            ]):
                 anonymized_lines.append(line)
                 continue
+
+            if any(keyword in line_lower for keyword in PrivacyAwareAnonymizer.DEGREE_KEYWORDS):
+                anonymized_lines.append(line)
+                continue
+
             if i < 3:
                 words = line.split()
-                if (
-                    i < 3 and len(words) <= 4
-                    and not any(w.lower() in {"summary", "profile", "skills"} for w in words)
-                ):
+                if len(words) <= 4 and not any(w.lower() in {"summary", "profile", "skills"} for w in words):
                     anonymized_lines.append(PrivacyAwareAnonymizer.PLACEHOLDER_NAME)
                     continue
 
-            line = re.sub(r'\b(?:name|nombre):\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', PrivacyAwareAnonymizer.PLACEHOLDER_NAME, line, flags=re.IGNORECASE)
+            line = re.sub(
+                r'\b(?:name|nombre):\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b',
+                PrivacyAwareAnonymizer.PLACEHOLDER_NAME,
+                line,
+                flags=re.IGNORECASE
+            )
 
             anonymized_lines.append(line)
 
@@ -292,7 +321,7 @@ class PrivacyAwareAnonymizer:
         """Clean up formatting after anonymization."""
         text = re.sub(r'[ \t]+', ' ', text)
         text = re.sub(r'\n{3,}', '\n\n', text)
-        text = re.sub(r'\n\s*\[\w+]\s*\n', '\n', text)
+        text = re.sub(r'\n\s*(?!\[)([^\n]*?)\s*\n', r'\n\1\n', text)
         text = re.sub(r'\n\s+\n', '\n\n', text)
 
         return text
