@@ -23,6 +23,12 @@ class JobMatchingService:
         os.makedirs(self.save_dir, exist_ok=True)
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+        if torch.cuda.is_available():
+            print("CUDA is available. Using GPU.")
+        else:
+            print("CUDA is not available. Using CPU.")
+
         self.model_name = model_name
         self.tokenizer = DistilBertTokenizer.from_pretrained(model_name)
         self.model = None
@@ -31,7 +37,6 @@ class JobMatchingService:
                       model_id: str,
                       train_data: list,
                       val_data: list = None,
-                      epochs: int = 5,
                       mode: str = "cosine"):
         """
         Loads a pre-trained model if available, or trains and saves a new model with a unique name.
@@ -59,7 +64,9 @@ class JobMatchingService:
             latest = sorted(candidates)[-1]
             model_path = os.path.join(self.save_dir, latest)
             print(f"[LM] Existing model found: {model_path}")
-            self.model = JobMatchingModel.load(model_path, device=self.device)
+            self.model = JobMatchingModel.load(
+                model_path, device=self.device
+            )
             return model_path
 
         print("[LM] No saved model found. Training new one...")
@@ -68,7 +75,6 @@ class JobMatchingService:
             model_id=model_id,
             train_data=train_data,
             val_data=val_data,
-            epochs=epochs,
             mode=mode
         )
 
@@ -76,12 +82,12 @@ class JobMatchingService:
                        model_id: str,
                        train_data: list,
                        val_data: list = None,
-                       epochs: int = 12,
+                       epochs: int = 15,
                        mode: str = "cosine",
-                       batch_size: int = 16,
-                       lr: float = 1e-5,
-                       weight_decay: float = 1e-4,
-                       freeze_bert: bool = True,
+                       batch_size: int = 32,
+                       lr: float = 3e-5,
+                       weight_decay: float = 1e-3,
+                       freeze_bert: bool = False,
                        use_amp: bool = False,
                        num_workers: int = 0):
         """
@@ -209,14 +215,14 @@ class JobMatchingService:
                     job_texts,
                     truncation=True,
                     padding=True,
-                    max_length=128,
+                    max_length=256,
                     return_tensors="pt"
                 )
                 res_tokens = self.tokenizer(
                     resume_texts,
                     truncation=True,
                     padding=True,
-                    max_length=128,
+                    max_length=256,
                     return_tensors="pt"
                 )
 

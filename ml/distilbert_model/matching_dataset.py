@@ -20,7 +20,7 @@ class MatchingDataset(Dataset):
         0 -> Non-matching
     """
 
-    def __init__(self, items: List[Tuple[str, str, int]], tokenizer: DistilBertTokenizer, max_length: int = 128):
+    def __init__(self, items: List[Tuple[str, str, int]], tokenizer: DistilBertTokenizer, max_length: int = 256):
         """
         Initialize the MatchingDataset.
 
@@ -30,7 +30,7 @@ class MatchingDataset(Dataset):
                 - resume_text: string containing the candidate's resume
                 - label: integer, 1 if matching, 0 if not
             tokenizer: HuggingFace BERT tokenizer to tokenize text inputs
-            max_length: Maximum number of tokens per text (default 128)
+            max_length: Maximum number of tokens per text (default 256)
         """
         self.items = items
         self.tokenizer = tokenizer

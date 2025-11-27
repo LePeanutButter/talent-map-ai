@@ -12,15 +12,14 @@ def load_and_train():
         )
 
         print("[LM] Loading dataset...")
-        train_data = load_training_data("data/master_resumes_train.jsonl")
-        val_data = load_training_data("data/master_resumes_val.jsonl")
+        train_data = load_training_data("data/training/master_resumes_train.jsonl")
+        val_data = load_training_data("data/training/master_resumes_val.jsonl")
 
         print("[LM] Attempting load or train...")
         service.load_or_train(
             model_id="job_matching_v1",
             train_data=train_data,
-            val_data=val_data,
-            epochs=12
+            val_data=val_data
         )
 
         g.job_matching_model = service

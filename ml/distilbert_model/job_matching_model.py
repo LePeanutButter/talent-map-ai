@@ -19,7 +19,7 @@ class JobMatchingModel(nn.Module):
 
     The model consists of:
         - A pretrained BERT encoder for textual representation.
-        - A projection layer to reduce BERT embeddings to 128 dimensions.
+        - A projection layer to reduce DistilBERT embeddings to 256 dimensions.
         - An optional classifier for supervised matching.
     """
 
@@ -31,7 +31,7 @@ class JobMatchingModel(nn.Module):
         Initialize the JobMatchingModel.
 
         Args:
-            model_name: Name of the pretrained BERT model to use.
+            model_name: Name of the pretrained DistilBERT model to use.
             device: Device to run the model on ('cuda' or 'cpu'). Defaults to CUDA if available.
             freeze_bert: If True, freezes BERT parameters to prevent gradient updates.
         """
@@ -62,13 +62,13 @@ class JobMatchingModel(nn.Module):
 
     def encode(self, tokens: dict) -> torch.Tensor:
         """
-        Encode tokenized input text into a 128-dimensional normalized embedding.
+        Encode tokenized input text into a 256-dimensional normalized embedding.
 
         Args:
             tokens: Dictionary containing BERT inputs (input_ids, attention_mask, token_type_ids if applicable).
 
         Returns:
-            Tensor of shape (batch_size, 128) containing normalized embeddings.
+            Tensor of shape (batch_size, 256) containing normalized embeddings.
         """
         tokens = {k: v.to(self.device) for k, v in tokens.items()}
         outputs = self.bert(**tokens, return_dict=True)
@@ -130,14 +130,14 @@ class JobMatchingModel(nn.Module):
                 job_text,
                 truncation=True,
                 padding=True,
-                max_length=512,
+                max_length=256,
                 return_tensors="pt"
             )
             res_tokens = self.tokenizer(
                 resume_text,
                 truncation=True,
                 padding=True,
-                max_length=512,
+                max_length=256,
                 return_tensors="pt"
             )
 

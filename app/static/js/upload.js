@@ -1,3 +1,13 @@
+function escapeHtml(str) {
+    if (!str && str !== "") return "";
+    return String(str)
+        .replaceAll('&', "&amp;")
+        .replaceAll('<', "&lt;")
+        .replaceAll('>', "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll('\'', "&#039;");
+}
+
 $(function() {
     $("#upload-form").on("submit", function(e) {
         e.preventDefault();
@@ -33,12 +43,52 @@ $(function() {
             processData: false,
             success: function(res) {
                 let html = "<h4>Results:</h4>";
-                res.extracted_texts.forEach((txt, i) => {
-                    html += `<hr><h5>File ${i + 1}</h5>
-                             <p><strong>Prediction Score:</strong> ${res.prediction_scores[i]}</p>
-                             <pre>${txt}</pre>`;
+
+                for (const [i, txt] of res.extracted_texts.entries()) {
+                    let score = Number.parseFloat(res.prediction_scores[i]);
+                    let percent = score * 100;
+                    if (percent < 0) percent = 0;
+                    percent = percent.toFixed(2);
+
+                    const fileName = files[i] ? files[i].name : "Unknown file";
+                    const arrowSvg = `<img src="/static/svg/dropdown-arrow-svgrepo-com.svg" alt="Toggle" class="arrow-icon" />`;
+
+                    html += `
+                        <hr>
+                        <div class="file-block">
+                            <div class="match-row" data-index="${i}" role="button" aria-expanded="false">
+                                <div class="file-info">
+                                    <strong class="file-label">File:</strong> <span class="file-name">${fileName}</span>
+                                </div>
+                                <div class="match-info">
+                                    <strong>Match percentage:</strong> <span class="match-percent">${percent}%</span>
+                                </div>
+                                <div class="match-arrow">${arrowSvg}</div>
+                            </div>
+                            <div class="match-panel" id="panel-${i}">
+                                <div class="match-score">Prediction Score: ${score}</div>
+                                <div class="match-text">${escapeHtml(txt)}</div>
+                            </div>
+                        </div>
+                        `;
+                    }
+
+                    $("#result").html(html);
+
+                    $("#result").off("click", ".match-row").on("click", ".match-row", function() {
+                    const $row = $(this);
+                    const idx = $row.data("index");
+                    const $panel = $("#panel-" + idx);
+
+                    const isOpen = $row.hasClass("open");
+                    if (isOpen) {
+                        $row.removeClass("open").attr("aria-expanded", "false");
+                        $panel.removeClass("open");
+                    } else {
+                        $row.addClass("open").attr("aria-expanded", "true");
+                        $panel.addClass("open");
+                    }
                 });
-                $("#result").html(html);
             },
             error: function(xhr) {
                 $("#result").html(

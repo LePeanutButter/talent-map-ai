@@ -207,8 +207,8 @@ class TestJobMatchingService(unittest.TestCase):
         # ============================================================
         # STAGE 7 — Testing HF resume dataset
         # ============================================================
-        dataset_path = "data/master_resumes.jsonl"
-        assert os.path.exists(dataset_path), "Dataset file not found at data/master_resumes.jsonl"
+        dataset_path = "data/dataset_test/master_resumes_hugging_face.jsonl"
+        assert os.path.exists(dataset_path), "Dataset file not found at data/dataset_test/master_resumes_hugging_face.jsonl"
 
         resumes = []
         with open(dataset_path, "r", encoding="utf-8") as f:
