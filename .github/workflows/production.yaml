@@ -2,7 +2,7 @@
 # GitHub Actions Workflow: CI Build & Deploy
 # Environment: Production
 # Description:
-#   - Builds and deploys the TalentMap AI Python web app
+#   - Builds the TalentMap AI Python web app
 #   - Runs on every push to the 'main' branch or manual trigger
 # ===========================================
 
@@ -19,7 +19,6 @@ on:
   pull_request:
     branches:
       - main
-
 
 # -------------------------------------------
 # Jobs Definition
@@ -61,47 +60,3 @@ jobs:
           path: |
             .
             !antenv/
-
-  # =========================================
-  # Job: Deploy Stage
-  # Purpose: Deploy the built Python app to Azure App Service
-  # Depends on: build
-  # =========================================
-  deploy:
-    if: github.event_name == 'push'
-    name: Deploy Stage for TalentMap AI (Production)
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      # Step 1: Download build artifact from previous job
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: python-app
-          path: build
-
-      # Step 2: Authenticate with Azure using OIDC credentials
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_581860A2212D438BA2E1CA159A652CA9 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2B6F08B292884BFCA1AC0E85658B7C7E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BEF9A1CDCBE4A4B8DBC740B85FEFC58 }}
-
-      # Step 3: Deploy the app to Azure Web App (Production slot)
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
-        id: deploy-to-webapp
-        with:
-          app-name: 'talentmap-ai-production'
-          slot-name: 'Production'
-          package: build
-
-      # Step 4: Logout from Azure to clean up session
-      - name: Logout from Azure
-        run: az logout
-          
