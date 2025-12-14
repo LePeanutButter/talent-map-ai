@@ -76,6 +76,8 @@ The TalentMap AI system follows a modular architecture:
 * **AI Engine** - DistilBERT embeddings for semantic similarity.
 * **Ethics Layer** - Bias detection, anonymization, and explainability mechanisms.
 
+![class-diagram](img/class-diagram.png)
+
 ## Ethical Framework
 
 TalentMap AI follows UNESCO’s *Recommendation on the Ethics of Artificial Intelligence (2021)*, applying principles of:
